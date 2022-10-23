@@ -1,23 +1,18 @@
-/**
- * SCROLLTRIGGER INIT
- */
-gsap.registerPlugin(ScrollTrigger);
+// register gsap plugins
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-/**
- * GLOBAL VARIABLES
- */
-
+// selector alias
 const select = (e) => document.querySelector(e);
 const selectAll = (e) => document.querySelectorAll(e);
 
 const sections = document.querySelectorAll('.rg__column');
 
 const allLinks = gsap.utils.toArray('.portfolio__categories a');
-const pageBackground = document.querySelector('.fill-background');
-const largeImage = document.querySelector('.portfolio__image--l');
-const smallImage = document.querySelector('.portfolio__image--s');
-const lInside = document.querySelector('.portfolio__image--l .image_inside');
-const sInside = document.querySelector('.portfolio__image--s .image_inside');
+const pageBackground = select('.fill-background');
+const largeImage = select('.portfolio__image--l');
+const smallImage = select('.portfolio__image--s');
+const lInside = select('.portfolio__image--l .image_inside');
+const sInside = select('.portfolio__image--s .image_inside');
 
 const loader = select('.loader');
 const maskContent = select('.loader__mask--content');
@@ -25,16 +20,13 @@ const mask = select('.loader__mask');
 
 let bodyScrollBar;
 
-/**
- * INITIAL FUNCTION
- */
 function init() {
   /**
    * FIRST LOADING PAGE
    */
-  const firstLoadTl = gsap.timeline();
+  const loaderTimeline = gsap.timeline();
 
-  firstLoadTl
+  loaderTimeline
     .set(pageBackground, { backgroundColor: '#BC9296', ease: 'none' })
     .set(loader, { autoAlpha: 1, ease: 'none' }, 0)
     .to(maskContent, { delay: 2, autoAlpha: 0 });
@@ -61,7 +53,7 @@ function init() {
 
   /**  updateProgress  **/
   function updateProgress(value) {
-    gsap.to(firstLoadTl, {
+    gsap.to(loaderTimeline, {
       progress: value / imageCount,
       duration: 0.3,
       ease: 'power1.out',
@@ -71,7 +63,7 @@ function init() {
   /**  Do whatever when all images are loaded **/
   imgLoad.on('done', function (instance) {
     /**  Init our loader animation onComplete **/
-    gsap.set(firstLoadTl, { autoAlpha: 0, onComplete: initPageTransition });
+    gsap.set(loaderTimeline, { autoAlpha: 0, onComplete: initPageTransition });
   });
 }
 
