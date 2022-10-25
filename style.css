@@ -123,6 +123,28 @@ body {
   letter-spacing: 1vw;
 }
 
+.loader__progress-wrapper {
+  position: relative;
+  min-height: 1.2rem;
+  width: 80%;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 16px;
+  border: 2px solid var(--bcg-pink);
+  overflow: hidden;
+}
+
+.loader__progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: var(--bcg-white);
+  /* transition: width 0.25s ease-out; */
+}
+
 .loader__mask .inner {
   position: absolute;
   /*position: relative;*/

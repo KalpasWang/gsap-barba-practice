@@ -15,6 +15,7 @@ const lInside = select('.portfolio__image--l .image_inside');
 const sInside = select('.portfolio__image--s .image_inside');
 
 const loader = select('.loader');
+const progressBar = select('.loader__progress-bar');
 const maskContent = select('.loader__mask--content');
 const mask = select('.loader__mask');
 
@@ -24,15 +25,14 @@ function init() {
   /**
    * FIRST LOADING PAGE
    */
-  const loaderTimeline = gsap.timeline();
+  const loadingTimeline = gsap.timeline();
 
-  loaderTimeline
+  loadingTimeline
     .set(pageBackground, { backgroundColor: '#BC9296', ease: 'none' })
     .set(loader, { autoAlpha: 1, ease: 'none' }, 0)
-    .to(maskContent, { delay: 2, autoAlpha: 0 });
+    .to(maskContent, { delay: 2, autoAlpha: 0 })
+    .to(progressBar, { duration: 2.5, width: '100%', ease: 'power1.inOut' }, 0);
 
-  /** IMAGES LOADED  => imagesLoaded.js */
-  /** Set up variables  **/
   let loadedImageCount = 0,
     imageCount;
   const container = select('#main');
@@ -53,7 +53,7 @@ function init() {
 
   /**  updateProgress  **/
   function updateProgress(value) {
-    gsap.to(loaderTimeline, {
+    gsap.to(loadingTimeline, {
       progress: value / imageCount,
       duration: 0.3,
       ease: 'power1.out',
@@ -63,7 +63,7 @@ function init() {
   /**  Do whatever when all images are loaded **/
   imgLoad.on('done', function (instance) {
     /**  Init our loader animation onComplete **/
-    gsap.set(loaderTimeline, { autoAlpha: 0, onComplete: initPageTransition });
+    gsap.set(loadingTimeline, { autoAlpha: 0, onComplete: initPageTransition });
   });
 }
 
