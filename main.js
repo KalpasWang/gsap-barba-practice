@@ -21,50 +21,48 @@ const mask = select('.loader__mask');
 
 let bodyScrollBar;
 
+/**
+ * initialize loader animation
+ */
 function init() {
-  /**
-   * FIRST LOADING PAGE
-   */
-  const loadingTimeline = gsap.timeline();
+  const loadingTimeline = gsap.timeline({
+    // Init page animation when loding complete
+    onComplete: initPageTransition,
+  });
 
   loadingTimeline
-    .set(pageBackground, { backgroundColor: '#BC9296', ease: 'none' })
-    .set(loader, { autoAlpha: 1, ease: 'none' }, 0)
-    .to(maskContent, { delay: 2, autoAlpha: 0 })
-    .to(progressBar, { duration: 2.5, width: '100%', ease: 'power1.inOut' }, 0);
+    .set(pageBackground, { backgroundColor: '#BC9296' })
+    .set(loader, { autoAlpha: 1 })
+    .to(progressBar, { duration: 2, width: '100%', ease: 'none' }, 0);
+  // .to(maskContent, { delay: 2, autoAlpha: 0 });
 
   let loadedImageCount = 0,
     imageCount;
   const container = select('#main');
 
-  /** Set up images loaded **/
+  // Set up imagesLoaded library
   const imgLoad = imagesLoaded(container);
   imageCount = imgLoad.images.length;
 
   updateProgress(0);
 
-  /** triggered after each item is loaded **/
+  // triggered updateProgress function after each image is loaded
   imgLoad.on('progress', function () {
-    /** Increase the num ber of loaded images **/
     loadedImageCount++;
-    /**  Update Progress **/
-    updateProgress(loadedImageCount);
+    // updateProgress(loadedImageCount);
   });
 
-  /**  updateProgress  **/
   function updateProgress(value) {
     gsap.to(loadingTimeline, {
       progress: value / imageCount,
-      duration: 0.3,
-      ease: 'power1.out',
+      duration: 0.25,
+      ease: 'none',
     });
   }
 
-  /**  Do whatever when all images are loaded **/
-  imgLoad.on('done', function (instance) {
-    /**  Init our loader animation onComplete **/
-    gsap.set(loadingTimeline, { autoAlpha: 0, onComplete: initPageTransition });
-  });
+  // imgLoad.on('done', function (instance) {
+  //   gsap.set(loadingTimeline, { autoAlpha: 0, onComplete: initPageTransition });
+  // });
 }
 
 init();
@@ -151,7 +149,7 @@ function initPageTransition() {
 function initLoader() {
   const tlLoaderIn = gsap.timeline({
     defaults: {
-      duration: 1.1,
+      duration: 1,
       ease: 'power2.out',
     },
     onComplete: () => initContent(),
@@ -167,20 +165,18 @@ function initLoader() {
 
   tlLoaderIn
     .set(loaderContent, { autoAlpha: 1 })
-    .fromTo(maskContent, { autoAlpha: 0 }, { duration: 0.8, autoAlpha: 1 })
+    .set(mask, { yPercent: 100 })
+    .set(image, { yPercent: -80 })
+    .set([line1, line2], { yPercent: 100 })
+    .to(maskContent, { autoAlpha: 0 })
     .to(
       loaderInner,
       {
-        scaleY: 0,
+        scaleY: 1,
         transformOrigin: 'bottom',
       },
-      1.8
-    )
-    .addLabel('revealImage')
-    .from(mask, { yPercent: 100 }, 'revealImage-=0.6')
-    .from(image, { yPercent: -80 }, 'revealImage-=0.6')
-    .from([line1, line2], { yPercent: 100 }, 'revealImage-=0.4')
-    .to(maskContent, { autoAlpha: 0 }, 1.6);
+      '<0.5'
+    );
 
   const tlLoaderOut = gsap.timeline({
     defaults: {
