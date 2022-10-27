@@ -34,7 +34,6 @@ function init() {
     .set(pageBackground, { backgroundColor: '#BC9296' })
     .set(loader, { autoAlpha: 1 })
     .to(progressBar, { duration: 2, width: '100%', ease: 'none' }, 0);
-  // .to(maskContent, { delay: 2, autoAlpha: 0 });
 
   let loadedImageCount = 0,
     imageCount;
@@ -49,7 +48,7 @@ function init() {
   // triggered updateProgress function after each image is loaded
   imgLoad.on('progress', function () {
     loadedImageCount++;
-    // updateProgress(loadedImageCount);
+    updateProgress(loadedImageCount);
   });
 
   function updateProgress(value) {
@@ -59,10 +58,6 @@ function init() {
       ease: 'none',
     });
   }
-
-  // imgLoad.on('done', function (instance) {
-  //   gsap.set(loadingTimeline, { autoAlpha: 0, onComplete: initPageTransition });
-  // });
 }
 
 init();
@@ -147,7 +142,7 @@ function initPageTransition() {
  * INIT LOADER
  */
 function initLoader() {
-  const tlLoaderIn = gsap.timeline({
+  const t1 = gsap.timeline({
     defaults: {
       duration: 1,
       ease: 'power2.out',
@@ -163,8 +158,7 @@ function initLoader() {
   const lines = selectAll('.loader__title--mask');
   const loaderContent = select('.loader__content');
 
-  tlLoaderIn
-    .set(loaderContent, { autoAlpha: 1 })
+  t1.set(loaderContent, { autoAlpha: 1 })
     .set(mask, { yPercent: 100 })
     .set(image, { yPercent: -80 })
     .set([line1, line2], { yPercent: 100 })
@@ -173,27 +167,14 @@ function initLoader() {
       loaderInner,
       {
         scaleY: 1,
-        transformOrigin: 'bottom',
       },
       '<0.5'
-    );
-
-  const tlLoaderOut = gsap.timeline({
-    defaults: {
-      duration: 1.2,
-      ease: 'power2.inOut',
-    },
-    delay: 1,
-  });
-
-  tlLoaderOut
-    .to(lines, { yPercent: -500, stagger: 0.2 }, 0)
-    .to([loader, loaderContent], { yPercent: -100 }, 0.2)
-    .from('#main', { y: 150 }, 0.2)
-    .to(pageBackground, { backgroundColor: '#a3abb1', ease: 'none' }, 0);
-
-  const tlLoader = gsap.timeline();
-  tlLoader.add(tlLoaderIn).add(tlLoaderOut);
+    )
+    .to(loaderContent, { scaleY: 1 }, '<0.1')
+    .to(lines, { yPercent: -500, stagger: 0.2 }, '<0.1')
+    .to([loader, loaderContent], { yPercent: -100 })
+    .from('#main', { y: 150 }, '<')
+    .to(pageBackground, { backgroundColor: '#a3abb1', ease: 'none' }, '<');
 }
 
 /**

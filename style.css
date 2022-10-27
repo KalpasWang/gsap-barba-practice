@@ -135,7 +135,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   border-radius: 16px;
-  border: 2px solid var(--bcg-pink);
+  border: 2px solid var(--bcg-pinkdark);
   overflow: hidden;
 }
 
@@ -171,6 +171,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: scaleY(0);
+  transform-origin: bottom;
   /* background: transparent;*/
   /*visibility: hidden; hide loader content by default */
 }
